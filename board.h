@@ -20,7 +20,7 @@ class Board {
         void modify_position(int id, int x, int y);
 
     private:
-        int num_jobs, width, height; 
+        int num_jobs, width, height, num_page; 
         ofstream& output; 
         char* board; 
         Page* page = new Page[num_jobs];
@@ -40,6 +40,7 @@ Board::Board(int num_jobs, int width, int height, ofstream& output_stream): outp
         }
     }
 
+    num_page = 0;
 }
 
 Board::~Board() {
@@ -85,7 +86,13 @@ void Board::print_job(int job_idx, char job_type, int id) {
 
 
 void Board::insert_page(int x, int y, int width, int height, int id, int content) {
-
+    page[num_page++] = Page(x, y, width, height, id, content);
+    
+    for (int h = 0; h < height; h++) {
+        for (int w = 0; w < width; w++) {
+            board[(y+h)*width + (x+w)] = content;
+        }
+    }
 }
 
 void Board::delete_page(int id) {

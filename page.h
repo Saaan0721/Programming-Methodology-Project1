@@ -1,5 +1,8 @@
 class Page {
     public:
+        Page();
+        Page(int _x, int _y, int _width, int _height, int _id, char _content)
+        :x(_x), y(_y), width(_width), height(_height), id(_id), content(_content) {}
         void set_position(int _x, int _y) { x=_x, y=_y; }
         void set_size(int _width, int _height) { width=_width, height=_height; }
         void set_id(int _id) { id=_id; }
