@@ -90,9 +90,11 @@ void Board::insert_page(int x, int y, int width, int height, int id, int content
     
     for (int h = 0; h < height; h++) {
         for (int w = 0; w < width; w++) {
-            board[(y+h)*width + (x+w)] = content;
+            board[(h+y)*this->width + (w+x)] = content;
         }
     }
+
+    print_board();
 }
 
 void Board::delete_page(int id) {
