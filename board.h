@@ -23,6 +23,7 @@ class Board {
         int num_jobs, width, height; 
         ofstream& output; 
         char* board; 
+        Page* page = new Page[num_jobs];
 };
 
 
