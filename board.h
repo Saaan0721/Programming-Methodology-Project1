@@ -19,6 +19,7 @@ class Board {
         void modify_content(int id, char content);
         void modify_position(int id, int x, int y);
 
+
     private:
         int num_jobs, width, height, num_page; 
         ofstream& output; 
@@ -98,7 +99,9 @@ void Board::insert_page(int x, int y, int width, int height, int id, int content
 }
 
 void Board::delete_page(int id) {
-    
+    for(int i = 0; i < num_page; i++) {
+
+    }
 }
 
 void Board::modify_content(int id, char content) {

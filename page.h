@@ -2,7 +2,7 @@ class Page {
     public:
         Page() {}; 
         Page(int _x, int _y, int _width, int _height, int _id, char _content)
-        :x(_x), y(_y), width(_width), height(_height), id(_id), content(_content) {}
+            :x(_x), y(_y), width(_width), height(_height), id(_id), content(_content) {}
         void set_x(int _x) { x=_x; }
         void set_y(int _y) { y=_y; }
         void set_width(int _width) { width=_width; }
@@ -16,6 +16,11 @@ class Page {
         int get_height() { return height; }
         int get_id() { return id; };
         char get_content() { return content; };
+
+        bool is_on(Page page) {
+            return (abs(x - page.get_x()) <= (width + page.get_x()) / 2) 
+                && (abs(y - page.get_y()) <= (height + page.get_y()) / 2);
+        }
 
     private:
         int x, y; // position of the page on the board
