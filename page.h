@@ -16,15 +16,21 @@ class Page {
         int get_height() { return height; }
         int get_id() { return id; };
         char get_content() { return content; };
-
-        bool is_on(Page page) {
-            return (abs(x - page.get_x()) <= (width + page.get_x()) / 2) 
-                && (abs(y - page.get_y()) <= (height + page.get_y()) / 2);
-        }
+        bool is_overlapped(Page p);
+        
 
     private:
         int x, y; // position of the page on the board
         int width, height; // width and height of the page 
         int id; // unique id for each page
-        char content; 
+        char content;
 };
+
+bool Page::is_overlapped(Page p2) {
+    double distance_x, distance_y;
+    distance_x = (x + (double) width / 2) - (p2.get_x() + (double) p2.get_width() / 2);
+    distance_y = (y + (double) height / 2) - (p2.get_y() + (double) p2.get_height() / 2);
+
+    return (distance_x < (double)(width + p2.get_width()) / 2) &&
+        (distance_y < (double)(height + p2.get_height()) / 2);
+}
