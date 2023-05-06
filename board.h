@@ -1,5 +1,7 @@
 #include <fstream>
 #include <vector>
+#include <algorithm>
+#include <iostream>
 
 #include "page.h"
 
@@ -7,6 +9,7 @@ using std::endl;
 using std::ofstream;
 using std::vector;
 using std::cout;
+
 
 class Board {
     public:
@@ -26,6 +29,8 @@ class Board {
         void draw_board();
         vector<Page> above_page(int id);
         Page find_page(int id);
+        int find_index(int id);
+        bool compare(Page p1, Page p2);
 
     private:
         int num_jobs, width, height, num_page; 
@@ -95,23 +100,6 @@ void Board::print_job(int job_idx, char job_type, int id) {
     output << id << endl;
 }
 
-
-void Board::draw_board() {
-    for (int h = 0; h < height; h++) {
-        for (int w = 0; w < width; w++) {
-            board[h*width + w] = ' ';
-        }
-    }
-    for(Page p: page) {
-        for(int h = 0; h < p.get_height(); h++) {
-            for(int w = 0; w < p.get_width(); w++) {
-                board[(h+p.get_y())*width + (w+p.get_x())] = p.get_content();
-            }
-        }
-    }
-}
-
-
 void Board::insert_page(int x, int y, int width, int height, int id, int content) {
     page.push_back(Page(x, y, width, height, id, content));
     print_board();
@@ -124,28 +112,29 @@ void Board::insert_page(Page p) {
 
 void Board::delete_page(int id) {
     vector<Page> above = above_page(id);
-    int idx;
-    for(int i = 0; i < page.size(); i++) {
-        if(page.at(i).get_id() == id) {
-            idx = i;
-            break;
-        }
+
+    for(Page p:above) {
+        cout << p.get_content() << " is above " << find_page(id).get_content() << endl;
     }
 
     if(above.size() == 0) {
-        page.erase(page.begin() + idx);
+        cout << "delete " << find_page(id).get_content() << endl;
+        page.erase(page.begin() + find_index(id));
         print_board();
     }
     else {
         for(Page p:above) {
             delete_page(p.get_id());
-            // print_board();
         }
-        page.erase(page.begin() + idx);
+
+        cout << "delete " << find_page(id).get_content() << endl;
+        page.erase(page.begin() + find_index(id));
         print_board();
+
+        reverse(above.begin(), above.end());
         for(Page p:above) {
+            cout << "insert " << p.get_content() << endl;
             insert_page(p);
-            print_board();
         }
     }
 }
@@ -185,6 +174,7 @@ void Board::modify_position(int id, int x, int y) {
     }
     else {
         for(Page p:above) {
+            // cout << p.get_content() << " is above " << target_page.get_content() << endl;
             delete_page(p.get_id());
             print_board();
         }
@@ -198,6 +188,21 @@ void Board::modify_position(int id, int x, int y) {
     } 
 }
 
+void Board::draw_board() {
+    for (int h = 0; h < height; h++) {
+        for (int w = 0; w < width; w++) {
+            board[h*width + w] = ' ';
+        }
+    }
+    for(Page p: page) {
+        for(int h = 0; h < p.get_height(); h++) {
+            for(int w = 0; w < p.get_width(); w++) {
+                board[(h+p.get_y())*width + (w+p.get_x())] = p.get_content();
+            }
+        }
+    }
+}
+
 vector<Page> Board::above_page(int id) {
     vector<Page> above;
 
@@ -205,6 +210,7 @@ vector<Page> Board::above_page(int id) {
         if(page.at(i).get_id() == id) {
             for(int j = i + 1; j < page.size(); j++) {
                 if(page.at(i).is_overlapped(page.at(j))) {
+                    // cout << page.at(j).get_content() << " is overlapped with " << page.at(i).get_content() << endl;
                     above.push_back(page.at(j));
                     for(int k = i + 1; k < j; k++) {
                         if(page.at(j).is_overlapped(page.at(k))) {
@@ -216,6 +222,8 @@ vector<Page> Board::above_page(int id) {
             }
         }
     }
+    
+    sort(above.begin(), above.end());
 
     return above;
 }
@@ -228,4 +236,18 @@ Page Board::find_page(int id) {
     }
 
     return Page();
+}
+
+int Board::find_index(int id) {
+    for(int i = 0; i < page.size(); i++) {
+        if(page.at(i).get_id() == id) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+bool Board::compare(Page p1, Page p2) {
+    return (p1.get_id() < p2.get_id());
 }
