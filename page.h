@@ -1,8 +1,8 @@
-#include <iostream>
 #include <vector>
+#include <cmath>
 
-using std::cout;
 using std::endl;
+using std::abs;
 
 class Page {
     public:
@@ -24,7 +24,9 @@ class Page {
         char get_content() { return content; };
 
         bool is_overlapped(Page p);
+        bool is_overlapped(int _x, int _y);
         bool operator<(Page &p);
+        bool operator==(Page p);
         
 
     private:
@@ -36,9 +38,32 @@ class Page {
 
 bool Page::is_overlapped(Page p) {
     double distance_x, distance_y;
+
+    if(!width || !height || !p.get_width() || !p.get_height()) {
+        return false;
+    }
+
     distance_x = abs((x + (double) width / 2.0) - (p.get_x() + (double) p.get_width() / 2.0));
     distance_y = abs((y + (double) height / 2.0) - (p.get_y() + (double) p.get_height() / 2.0));
-    // cout << content << " " << p.get_content() << " " << distance_x << " " << distance_y << endl;
+
+    return (distance_x < (double)(width + p.get_width()) / 2.0) &&
+        (distance_y < (double)(height + p.get_height()) / 2.0);
+}
+
+bool Page::is_overlapped(int _x, int _y) {
+    double distance_x, distance_y;
+    Page p = Page();
+    p.set_x(_x);
+    p.set_y(_y);
+    p.set_width(1);
+    p.set_height(1);
+
+    if(!width || !height || !p.get_width() || !p.get_height()) {
+        return false;
+    }
+
+    distance_x = abs((x + (double) width / 2.0) - (p.get_x() + (double) p.get_width() / 2.0));
+    distance_y = abs((y + (double) height / 2.0) - (p.get_y() + (double) p.get_height() / 2.0));
 
     return (distance_x < (double)(width + p.get_width()) / 2.0) &&
         (distance_y < (double)(height + p.get_height()) / 2.0);
@@ -46,4 +71,8 @@ bool Page::is_overlapped(Page p) {
 
 bool Page::operator<(Page &p) {
     return id < p.get_id();
+}
+
+bool Page::operator==(Page p) {
+    return id == p.get_id();
 }

@@ -1,7 +1,6 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 #include <stack>
 
 #include "page.h"
@@ -9,7 +8,6 @@
 using std::endl;
 using std::ofstream;
 using std::vector;
-using std::cout;
 using std::stack;
 
 
@@ -122,7 +120,6 @@ void Board::delete_page(int id) {
     clear_stack();
 
     if(above.size() == 0) {
-        page_stack.push(target_page);
         page.erase(page.begin() + find_index(id));
         print_board();
     }
@@ -135,15 +132,18 @@ void Board::delete_page(int id) {
         print_board();
 
         while(!page_stack.empty()) {
-            Page p = page_stack.top();
+            insert_page(page_stack.top());
             page_stack.pop();
-            insert_page(p);
         }
     }
 }
 
 void Board::delete_page(Page p) {
     vector<Page> above = above_page(p.get_id());
+
+    if(find(page.begin(), page.end(), p) == page.end()) {
+        return;
+    }
 
     if(above.size() == 0) {
         page_stack.push(p);
@@ -152,7 +152,7 @@ void Board::delete_page(Page p) {
     }
     else {
         for(Page p:above) {
-            delete_page(p.get_id());
+            delete_page(p);
         }
 
         page_stack.push(p);
@@ -166,20 +166,23 @@ void Board::modify_content(int id, char content) {
     Page target_page = find_page(id);
 
     if(above.size() == 0) {
-        delete_page(id);
+        page.erase(page.begin() + find_index(target_page.get_id()));
+        print_board();
         target_page.set_content(content);
         insert_page(target_page);
     }
     else {
         for(Page p:above) {
-            delete_page(p.get_id());
-            print_board();
+            delete_page(p);
         }
-        delete_page(id);
+        page.erase(page.begin() + find_index(target_page.get_id()));
+        print_board();
         target_page.set_content(content);
         insert_page(target_page);
-        for(Page p:above) {
-            insert_page(p);
+        
+        while(!page_stack.empty()) {
+            insert_page(page_stack.top());
+            page_stack.pop();
         }
     }
 }
@@ -189,23 +192,25 @@ void Board::modify_position(int id, int x, int y) {
     Page target_page = find_page(id);
 
     if(above.size() == 0) {
-        delete_page(id);
+        page.erase(page.begin() + find_index(target_page.get_id()));
+        print_board();
         target_page.set_x(x);
         target_page.set_y(y);
         insert_page(target_page);
     }
     else {
         for(Page p:above) {
-            // cout << p.get_content() << " is above " << target_page.get_content() << endl;
-            delete_page(p.get_id());
-            print_board();
+            delete_page(p);
         }
-        delete_page(id);
+        page.erase(page.begin() + find_index(target_page.get_id()));
+        print_board();
         target_page.set_x(x);
         target_page.set_y(y);
         insert_page(target_page);
-        for(Page p:above) {
-            insert_page(p);
+
+        while(!page_stack.empty()) {
+            insert_page(page_stack.top());
+            page_stack.pop();
         }
     } 
 }
@@ -227,24 +232,21 @@ void Board::draw_board() {
 
 vector<Page> Board::above_page(int id) {
     vector<Page> above;
-
-    for(int i = 0; i < page.size() - 1; i++) {
-        if(page.at(i).get_id() == id) {
-            for(int j = i + 1; j < page.size(); j++) {
-                if(page.at(i).is_overlapped(page.at(j))) {
-                    // cout << page.at(j).get_content() << " is overlapped with " << page.at(i).get_content() << endl;
-                    above.push_back(page.at(j));
-                    for(int k = i + 1; k < j; k++) {
-                        if(page.at(j).is_overlapped(page.at(k))) {
-                            above.pop_back();
-                            break;
-                        }
+    Page target_page = find_page(id);
+    
+    for(int y = target_page.get_y(); y < target_page.get_y() + target_page.get_height(); y++) {
+        for(int x = target_page.get_x(); x < target_page.get_x() + target_page.get_width(); x++) {
+            for(int i = find_index(id) + 1; i < page.size(); i++) {
+                if(page.at(i).is_overlapped(x, y)) {
+                    if(find(above.begin(), above.end(), page.at(i)) == above.end()) {
+                        above.push_back(page.at(i));
                     }
+                    break;
                 }
             }
         }
     }
-    
+
     sort(above.begin(), above.end());
 
     return above;
