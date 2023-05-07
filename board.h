@@ -19,28 +19,46 @@ class Board {
         void print_board();
         void print_job(int job_idx, char job_type, int id);
 
-        //job functions
+        // job functions
         void insert_page(int x, int y, int width, int height, int id, int content);
-        void insert_page(Page p); //overloading
+        void insert_page(Page p); // overloading
         void delete_page(int id);
-        void delete_page(Page p); //overloading
+        void delete_page(Page p); // overloading
         void modify_content(int id, char content);
         void modify_position(int id, int x, int y);
 
+        // my functions
+
         void draw_board();
+        // Postcondition: board is drawn using page vector.
+
         vector<Page> above_page(int id);
-        Page find_page(int id);
+        // Precondition: id of page
+        // find all pages above page of given id and sort pages based on id,
+        // return a page vector above.
+
+        Page find_page(int id); 
+        // Precondition: id of page
+        // return a page found in page vector.
+
         int find_index(int id);
-        bool compare(Page p1, Page p2);
-        void clear_stack();
-        void insert_stack();
+        // Precondition: id of page
+        // return an index in page vector.
+
+        void clear_stack(); 
+        // Postcondition: clear page_stack.
+
+        void insert_stack(); 
+        // Postcondition: insert pages in page_stack.
 
     private:
-        int num_jobs, width, height, num_page; 
+        int num_jobs, width, height; 
         ofstream& output; 
         char* board; 
-        vector<Page> page;
-        stack<Page> page_stack;
+
+        // my variables
+        vector<Page> page; // pages on board
+        stack<Page> page_stack; // pages to be insert(used in delete())
 };
 
 
@@ -56,8 +74,6 @@ Board::Board(int num_jobs, int width, int height, ofstream& output_stream): outp
             board[h*width + w] = ' ';
         }
     }
-
-    num_page = 0;
 }
 
 Board::~Board() {
@@ -69,7 +85,7 @@ Board::~Board() {
 void Board::print_board() {
     int h, w;
 
-    draw_board();
+    draw_board(); // draw a board everytime before print a board.
 
     for (w = 0; w < width+2; w++) output << "- ";
     output << endl;
@@ -119,18 +135,23 @@ void Board::delete_page(int id) {
     vector<Page> above = above_page(id);
     clear_stack();
 
+    // base case: if page don't have above pages, delete the page and print a board.
     if(above.size() == 0) {
         page.erase(page.begin() + find_index(id));
         print_board();
     }
+    // recursive step
     else {
+        // delete all above pages.
         for(Page p:above) {
             delete_page(p);
         }
 
+        // delete the page and print a board.
         page.erase(page.begin() + find_index(id));
         print_board();
 
+        // insert above pages in page_stack.
         while(!page_stack.empty()) {
             insert_page(page_stack.top());
             page_stack.pop();
@@ -138,6 +159,7 @@ void Board::delete_page(int id) {
     }
 }
 
+// overloading, but this func don't insert pages.
 void Board::delete_page(Page p) {
     vector<Page> above = above_page(p.get_id());
 
@@ -165,21 +187,27 @@ void Board::modify_content(int id, char content) {
     vector<Page> above = above_page(id);
     Page target_page = find_page(id);
 
+    // base case: if page don't have above pages, modify the page and print a board.
     if(above.size() == 0) {
         page.erase(page.begin() + find_index(target_page.get_id()));
         print_board();
         target_page.set_content(content);
         insert_page(target_page);
     }
+    // recursive step
     else {
+        // delete all above pages.
         for(Page p:above) {
             delete_page(p);
         }
+
+        // modify the page and print a board.
         page.erase(page.begin() + find_index(target_page.get_id()));
         print_board();
         target_page.set_content(content);
         insert_page(target_page);
         
+        // insert above pages in page_stack.
         while(!page_stack.empty()) {
             insert_page(page_stack.top());
             page_stack.pop();
@@ -187,6 +215,7 @@ void Board::modify_content(int id, char content) {
     }
 }
 
+// overloading, but this func don't insert pages.
 void Board::modify_position(int id, int x, int y) {
     vector<Page> above = above_page(id);
     Page target_page = find_page(id);
@@ -216,11 +245,13 @@ void Board::modify_position(int id, int x, int y) {
 }
 
 void Board::draw_board() {
+    // initial the board to blank.
     for (int h = 0; h < height; h++) {
         for (int w = 0; w < width; w++) {
             board[h*width + w] = ' ';
         }
     }
+    // put pages on the board.
     for(Page p: page) {
         for(int h = 0; h < p.get_height(); h++) {
             for(int w = 0; w < p.get_width(); w++) {
@@ -234,10 +265,16 @@ vector<Page> Board::above_page(int id) {
     vector<Page> above;
     Page target_page = find_page(id);
     
+    // for every point, check if another page is above.
     for(int y = target_page.get_y(); y < target_page.get_y() + target_page.get_height(); y++) {
         for(int x = target_page.get_x(); x < target_page.get_x() + target_page.get_width(); x++) {
             for(int i = find_index(id) + 1; i < page.size(); i++) {
+
+                // "overlapped" means two pages are close enough for "above"
+                // it only check distance between page, not depth.
                 if(page.at(i).is_overlapped(x, y)) {
+
+                    // page.at(i) is not in above, push_back page.at(i) in above.
                     if(find(above.begin(), above.end(), page.at(i)) == above.end()) {
                         above.push_back(page.at(i));
                     }
@@ -247,6 +284,7 @@ vector<Page> Board::above_page(int id) {
         }
     }
 
+    // sort above pages based on id.
     sort(above.begin(), above.end());
 
     return above;
@@ -270,10 +308,6 @@ int Board::find_index(int id) {
     }
 
     return -1;
-}
-
-bool Board::compare(Page p1, Page p2) {
-    return (p1.get_id() < p2.get_id());
 }
 
 void Board::clear_stack() {
