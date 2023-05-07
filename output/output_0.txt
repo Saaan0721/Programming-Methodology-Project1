@@ -228,39 +228,17 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 |                                                                                                     | 
 | c c c c c c c c c c                                                                                 | 
-| c x x x c c c c c c                                                                                 | 
-| c x x x c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
 | c c c c c c c c c c                                                                                 | 
 | c c c c c c c c c c                                                                                 | 
 | c c c c c c c c c c                                                                                 | 
-|                                                                                                     | 
-|                                                                                                     | 
-|                                                                                                     | 
-|                                                                                                     | 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-|                                                                                                     | 
 | c c c c c c c c c c                                                                                 | 
 | c c c c c c c c c c                                                                                 | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
-| c c c c c c M M M M M M M M M M                                                                     | 
+| c c c c c c c c c c                                                                                 | 
+| c c c c c c c c c c                                                                                 | 
+| c c c c c c c c c c                                                                                 | 
+| c c c c c c c c c c                                                                                 | 
+| c c c c c c c c c c                                                                                 | 
+| c c c c c c c c c c                                                                                 | 
 | c c c c c c c c c c                                                                                 | 
 | c c c c c c c c c c                                                                                 | 
 | c c c c c c c c c c                                                                                 | 
@@ -273,16 +251,16 @@
 |                                                                                                     | 
 |                                                                                                     | 
 |                                                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
 |                                                                                                     | 
 |                                                                                                     | 
 |                                                                                                     | 
@@ -295,16 +273,16 @@
 |                                                                                                     | 
 |                                                                                                     | 
 |   x x x                                                                                             | 
-|   x x x     M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
-|             M M M M M M M M M M                                                                     | 
+|   x x x                                                                                             | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
+|                                                                                                     | 
 |                                                                                                     | 
 |                                                                                                     | 
 |                                                                                                     | 
@@ -317,16 +295,38 @@
 |                                                                                                     | 
 |                                                                                                     | 
 |   x x x   k k k k k                                                                                 | 
-|   x x x   k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
-|           k k k k k M M M M M M                                                                     | 
+|   x x x   k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+|           k k k k k                                                                                 | 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+|                                                                                                     | 
+|                                                                                                     | 
+|   x x x   k k k k k                                                                                 | 
+|   x x x   k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
+|           k M M M M M M M M M M                                                                     | 
 |           k k k k k                                                                                 | 
 |           k k k k k                                                                                 | 
 |           k k k k k                                                                                 | 

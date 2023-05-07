@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <stack>
 
 #include "page.h"
 
@@ -9,6 +10,7 @@ using std::endl;
 using std::ofstream;
 using std::vector;
 using std::cout;
+using std::stack;
 
 
 class Board {
@@ -23,6 +25,7 @@ class Board {
         void insert_page(int x, int y, int width, int height, int id, int content);
         void insert_page(Page p); //overloading
         void delete_page(int id);
+        void delete_page(Page p); //overloading
         void modify_content(int id, char content);
         void modify_position(int id, int x, int y);
 
@@ -31,12 +34,15 @@ class Board {
         Page find_page(int id);
         int find_index(int id);
         bool compare(Page p1, Page p2);
+        void clear_stack();
+        void insert_stack();
 
     private:
         int num_jobs, width, height, num_page; 
         ofstream& output; 
         char* board; 
         vector<Page> page;
+        stack<Page> page_stack;
 };
 
 
@@ -111,15 +117,37 @@ void Board::insert_page(Page p) {
 }
 
 void Board::delete_page(int id) {
+    Page target_page = find_page(id);
     vector<Page> above = above_page(id);
-
-    for(Page p:above) {
-        cout << p.get_content() << " is above " << find_page(id).get_content() << endl;
-    }
+    clear_stack();
 
     if(above.size() == 0) {
-        cout << "delete " << find_page(id).get_content() << endl;
+        page_stack.push(target_page);
         page.erase(page.begin() + find_index(id));
+        print_board();
+    }
+    else {
+        for(Page p:above) {
+            delete_page(p);
+        }
+
+        page.erase(page.begin() + find_index(id));
+        print_board();
+
+        while(!page_stack.empty()) {
+            Page p = page_stack.top();
+            page_stack.pop();
+            insert_page(p);
+        }
+    }
+}
+
+void Board::delete_page(Page p) {
+    vector<Page> above = above_page(p.get_id());
+
+    if(above.size() == 0) {
+        page_stack.push(p);
+        page.erase(page.begin() + find_index(p.get_id()));
         print_board();
     }
     else {
@@ -127,15 +155,9 @@ void Board::delete_page(int id) {
             delete_page(p.get_id());
         }
 
-        cout << "delete " << find_page(id).get_content() << endl;
-        page.erase(page.begin() + find_index(id));
+        page_stack.push(p);
+        page.erase(page.begin() + find_index(p.get_id()));
         print_board();
-
-        reverse(above.begin(), above.end());
-        for(Page p:above) {
-            cout << "insert " << p.get_content() << endl;
-            insert_page(p);
-        }
     }
 }
 
@@ -250,4 +272,19 @@ int Board::find_index(int id) {
 
 bool Board::compare(Page p1, Page p2) {
     return (p1.get_id() < p2.get_id());
+}
+
+void Board::clear_stack() {
+    while(!page_stack.empty()) {
+        page_stack.pop();
+    }
+}
+
+void Board::insert_stack() {
+    while (!page_stack.empty())
+    {
+        insert_page(page_stack.top());
+        page_stack.pop();
+    }
+    
 }
