@@ -27,23 +27,25 @@ class Board {
         void modify_content(int id, char content);
         void modify_position(int id, int x, int y);
 
-        // my functions
+        // my functions begin here
 
         void draw_board();
-        // Postcondition: board is drawn using page vector.
+        // Postcondition: a board is drawn using page vector.
 
         vector<Page> above_page(int id);
         // Precondition: id of page
-        // find all pages above page of given id and sort pages based on id,
+        // find all pages above page of given id and sort above pages based on id,
         // return a vector of page above.
 
         Page find_page(int id); 
         // Precondition: id of page
         // return a page found in page vector.
+        // if there is no such page, return an empty page.
 
         int find_index(int id);
         // Precondition: id of page
         // return an index in page vector.
+        // if there is no such page, return -1
 
         void clear_stack(); 
         // Postcondition: clear page_stack.
@@ -58,7 +60,7 @@ class Board {
 
         // my variables
         vector<Page> page; // pages on board
-        stack<Page> page_stack; // pages to be insert(used in delete())
+        stack<Page> page_stack; // pages to be inserted(used in delete())
 };
 
 
@@ -160,7 +162,7 @@ void Board::delete_page(int id) {
     }
 }
 
-// overloading, but this func don't insert pages.
+// overloading, but this func doesn't insert pages.
 void Board::delete_page(Page p) {
     vector<Page> above = above_page(p.get_id());
 
@@ -198,6 +200,7 @@ void Board::modify_content(int id, char content) {
         target_page.set_content(content);
         insert_page(target_page);
     }
+
     // recursive step
     else {
         // delete all above pages.
@@ -233,6 +236,7 @@ void Board::modify_position(int id, int x, int y) {
         target_page.set_y(y);
         insert_page(target_page);
     }
+
     // recursive step
     else {
         // delete all above pages.
@@ -285,12 +289,13 @@ vector<Page> Board::above_page(int id) {
                 // it only check distance between page, not depth.
                 if(page.at(i).is_overlapped(x, y)) {
 
-                    // if page.at(i) is not in above, push back page.at(i) in above.
+                    // if this point is close enough and 
+                    // page.at(i) is not in above, push back page.at(i) in above.
                     if(find(above.begin(), above.end(), page.at(i)) == above.end()) {
                         above.push_back(page.at(i));
                     }
 
-                    // do not check this point because the point is already overlapped.
+                    // stop checking this point because the point is already aboved.
                     break;
                 }
             }
