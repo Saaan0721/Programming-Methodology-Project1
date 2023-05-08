@@ -35,7 +35,7 @@ class Board {
         vector<Page> above_page(int id);
         // Precondition: id of page
         // find all pages above page of given id and sort pages based on id,
-        // return a page vector above.
+        // return a vector of page above.
 
         Page find_page(int id); 
         // Precondition: id of page
@@ -133,9 +133,10 @@ void Board::insert_page(Page p) {
 void Board::delete_page(int id) {
     Page target_page = find_page(id);
     vector<Page> above = above_page(id);
+
     clear_stack();
 
-    // base case: if page don't have above pages, delete the page and print a board.
+    // base case: if a page don't have above pages, delete the page and print a board.
     if(above.size() == 0) {
         page.erase(page.begin() + find_index(id));
         print_board();
@@ -151,7 +152,7 @@ void Board::delete_page(int id) {
         page.erase(page.begin() + find_index(id));
         print_board();
 
-        // insert above pages in page_stack.
+        // insert pages in page_stack.
         while(!page_stack.empty()) {
             insert_page(page_stack.top());
             page_stack.pop();
@@ -163,6 +164,7 @@ void Board::delete_page(int id) {
 void Board::delete_page(Page p) {
     vector<Page> above = above_page(p.get_id());
 
+    // if p doesn't exit in page, terminate the func.
     if(find(page.begin(), page.end(), p) == page.end()) {
         return;
     }
@@ -187,7 +189,9 @@ void Board::modify_content(int id, char content) {
     vector<Page> above = above_page(id);
     Page target_page = find_page(id);
 
-    // base case: if page don't have above pages, modify the page and print a board.
+    clear_stack();
+
+    // base case: if page don't have above pages, modify a content of the page and print a board.
     if(above.size() == 0) {
         page.erase(page.begin() + find_index(target_page.get_id()));
         print_board();
@@ -201,7 +205,7 @@ void Board::modify_content(int id, char content) {
             delete_page(p);
         }
 
-        // modify the page and print a board.
+        // modify a content of the page and print a board.
         page.erase(page.begin() + find_index(target_page.get_id()));
         print_board();
         target_page.set_content(content);
@@ -215,11 +219,13 @@ void Board::modify_content(int id, char content) {
     }
 }
 
-// overloading, but this func don't insert pages.
 void Board::modify_position(int id, int x, int y) {
     vector<Page> above = above_page(id);
     Page target_page = find_page(id);
 
+    clear_stack();
+
+    // base case: if page don't have above pages, modify a position of the page and print a board.
     if(above.size() == 0) {
         page.erase(page.begin() + find_index(target_page.get_id()));
         print_board();
@@ -227,16 +233,21 @@ void Board::modify_position(int id, int x, int y) {
         target_page.set_y(y);
         insert_page(target_page);
     }
+    // recursive step
     else {
+        // delete all above pages.
         for(Page p:above) {
             delete_page(p);
         }
+
+        // modify a position of the page and print a board.
         page.erase(page.begin() + find_index(target_page.get_id()));
         print_board();
         target_page.set_x(x);
         target_page.set_y(y);
         insert_page(target_page);
 
+        // insert above pages in page_stack.
         while(!page_stack.empty()) {
             insert_page(page_stack.top());
             page_stack.pop();
@@ -245,13 +256,13 @@ void Board::modify_position(int id, int x, int y) {
 }
 
 void Board::draw_board() {
-    // initial the board to blank.
+    // initialize the board to blank.
     for (int h = 0; h < height; h++) {
         for (int w = 0; w < width; w++) {
             board[h*width + w] = ' ';
         }
     }
-    // put pages on the board.
+    // put all pages on the board.
     for(Page p: page) {
         for(int h = 0; h < p.get_height(); h++) {
             for(int w = 0; w < p.get_width(); w++) {
@@ -274,10 +285,12 @@ vector<Page> Board::above_page(int id) {
                 // it only check distance between page, not depth.
                 if(page.at(i).is_overlapped(x, y)) {
 
-                    // page.at(i) is not in above, push_back page.at(i) in above.
+                    // if page.at(i) is not in above, push back page.at(i) in above.
                     if(find(above.begin(), above.end(), page.at(i)) == above.end()) {
                         above.push_back(page.at(i));
                     }
+
+                    // do not check this point because the point is already overlapped.
                     break;
                 }
             }

@@ -34,7 +34,7 @@ class Page {
         // one page is smaller than another means it has lower id.
         bool operator<(Page &p);
 
-        // two pages is equal means that both pages have the same id.
+        // two pages are equal means that both pages have the same id.
         bool operator==(Page p);
         
 
